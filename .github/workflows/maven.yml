@@ -90,7 +90,7 @@ jobs:
         #run: mvn clean package --settings ~/.m2/settings.xml -U
         #run: mvn -T 1C -Dmaven.artifact.threads=12 clean verify --settings ~/.m2/settings.xml -U
         #run:  mvn -B -s ~/.m2/settings.xml -Daether.dependencyCollector.impl=bf -Dmaven.artifact.threads=4 dependency:resolve
-        run: mvn -T 1C clean verify --settings ~/.m2/settings.xml -U -Daether.dependencyCollector.impl=bf -Dmaven.artifact.threads=8
+        run: mvn -T 1C clean verify --settings ~/.m2/settings.xml -U -Daether.dependencyCollector.impl=bf -Dmaven.artifact.threads=4
 
         
       # 6) Deploy to Cloudsmith
