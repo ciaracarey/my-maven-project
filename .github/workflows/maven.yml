@@ -87,7 +87,7 @@ jobs:
 
       # Pre warm in parallel to avoid next step locking
       - name: Pre-warm Maven dependencies (safe parallel fetch)
-        run: mvn dependency:go-offline --batch-mode --settings ~/.m2/settings.xml -Daether.dependencyCollector.impl=bf -Dmaven.artifact.threads=4
+        run: mvn dependency:go-offline --batch-mode --settings ~/.m2/settings.xml -Daether.dependencyCollector.impl=bf -Dmaven.artifact.threads=2
 
       # 5) Build with Maven
       - name: Build with Maven
