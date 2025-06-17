@@ -54,7 +54,7 @@ jobs:
           oidc-auth-only: 'true'
           pip-install: false
 
-      # 4b) Configure Maven settings (Pull & Push to Cloudsmith)
+      # 4b) Configure Maven settings (Pull & Push to Cloudsmith, but skip plugins)
       - name: Configure Maven settings
         run: |
           mkdir -p ~/.m2
@@ -66,20 +66,23 @@ jobs:
             <servers>
               <server>
                 <id>cloudsmith</id>
-                <username>${{env.SERVICE}}</username>
-                <password>${CLOUDSMITH_API_KEY}</password>
+                <username>${{ env.SERVICE }}</username>
+                <password>${{ env.CLOUDSMITH_API_KEY }}</password>
               </server>
             </servers>
+      
             <mirrors>
+              <!-- Mirror everything except the repo whose id is 'central' -->
               <mirror>
                 <id>cloudsmith</id>
-                <name>Cloudsmith – mirror of Central</name>
-                <url>https://maven.cloudsmith.io/${CLOUDSMITH_ORG}/${CLOUDSMITH_REPO}/</url>
-                <mirrorOf>*</mirrorOf>
+                <name>Cloudsmith – mirror of external repos</name>
+                <url>https://maven.cloudsmith.io/${{ env.CLOUDSMITH_ORG }}/${{ env.CLOUDSMITH_REPO }}/</url>
+                <mirrorOf>*,!central</mirrorOf>
               </mirror>
             </mirrors>
           </settings>
           EOF
+
           
       # Debug: Show Maven settings to verify correctness (remove before production)
       - name: Debug Generated Maven Settings
