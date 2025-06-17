@@ -24,83 +24,60 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Show CPU count
-        run: |
-          echo "nproc reports: $(nproc)"
-          echo "lscpu summary:"
-          lscpu | grep '^CPU(s):'
+    # 1) Checkout
+    - name: Check out repo
+      uses: actions/checkout@v4
 
-      # 1) Check out the code
-      - name: Check out repository
-        uses: actions/checkout@v4
+    # 2) JDK
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: "11"
+        distribution: "adopt"
 
-      # 2) Set up Java (JDK 11)
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: "11"
-          distribution: "adopt"
+    # 3) Authenticate to Cloudsmith via OIDC
+    - name: Cloudsmith OIDC login
+      uses: cloudsmith-io/cloudsmith-cli-action@v1.0.2
+      with:
+        oidc-namespace: ${{ env.CLOUDSMITH_ORG }}
+        oidc-service-slug: ${{ env.SERVICE }}
+        oidc-auth-only: "true"
+        pip-install: false   # we’re not using pip here
 
-      # 3) Clear local Maven cache (optional)
-      - name: Clear Maven cache
-        run: rm -rf ~/.m2/repository/*
+    # 4) Write ~/.m2/settings.xml  
+    - name: Configure Maven settings
+      run: |
+        mkdir -p ~/.m2
+        cat > ~/.m2/settings.xml <<EOF
+        <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0">
+          <servers>
+            <server>
+              <id>cloudsmith</id>
+              <username>${{ env.SERVICE }}</username>
+              <password>${CLOUDSMITH_API_KEY}</password>
+            </server>
+          </servers>
 
-      # 4a) Get ephemeral token
-      - name: Auth to Cloudsmith with OIDC
-        uses: cloudsmith-io/cloudsmith-cli-action@v1.0.2
-        with:
-          oidc-namespace: ${{ env.CLOUDSMITH_ORG }}
-          oidc-service-slug: ${{ env.SERVICE }}
-          oidc-auth-only: 'true'
-          pip-install: false
+          <mirrors>
+            <!-- Mirror *everything* through Cloudsmith except the repo whose id is 'central'. -->
+            <mirror>
+              <id>cloudsmith</id>
+              <name>Cloudsmith mirror</name>
+              <url>https://maven.cloudsmith.io/${{ env.CLOUDSMITH_ORG }}/${{ env.CLOUDSMITH_REPO }}/</url>
+              <mirrorOf>*,!central</mirrorOf>
+            </mirror>
+          </mirrors>
+        </settings>
+        EOF
 
-      # 4b) Configure Maven settings (Pull & Push to Cloudsmith, but skip plugins)
-      - name: Configure Maven settings
-        run: |
-          mkdir -p ~/.m2
-          cat <<EOF > ~/.m2/settings.xml
-          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                                        https://maven.apache.org/xsd/settings-1.0.0.xsd">
-            <servers>
-              <server>
-                <id>cloudsmith</id>
-                <username>${{ env.SERVICE }}</username>
-                <password>${{ env.CLOUDSMITH_API_KEY }}</password>
-              </server>
-            </servers>
-      
-            <mirrors>
-              <!-- Mirror everything except the repo whose id is 'central' -->
-              <mirror>
-                <id>cloudsmith</id>
-                <name>Cloudsmith – mirror of external repos</name>
-                <url>https://maven.cloudsmith.io/${{ env.CLOUDSMITH_ORG }}/${{ env.CLOUDSMITH_REPO }}/</url>
-                <mirrorOf>*,!central</mirrorOf>
-              </mirror>
-            </mirrors>
-          </settings>
-          EOF
+    # 5) Build + unit tests
+    - name: Build with Maven
+      run: mvn -B clean verify --settings ~/.m2/settings.xml -U
 
-          
-      # Debug: Show Maven settings to verify correctness (remove before production)
-      - name: Debug Generated Maven Settings
-        run: cat ~/.m2/settings.xml
-
-      # Pre warm in parallel to avoid next step locking
-      - name: Pre-warm Maven dependencies (safe parallel fetch)
-        run: mvn dependency:go-offline --batch-mode --settings ~/.m2/settings.xml
-
-      # 5) Build with Maven
-      - name: Build with Maven
-        run: mvn clean package --settings ~/.m2/settings.xml -U
-        #run: mvn -T 1C -Dmaven.artifact.threads=12 clean verify --settings ~/.m2/settings.xml -U
-        #run:  mvn -B -s ~/.m2/settings.xml -Daether.dependencyCollector.impl=bf -Dmaven.artifact.threads=4 dependency:resolve
-        #run: mvn -T 1C clean verify --settings ~/.m2/settings.xml -U -Daether.dependencyCollector.impl=bf -Dmaven.artifact.threads=4
-
-        
-      # 6) Deploy to Cloudsmith
-      - name: Deploy to Cloudsmith
-        run: mvn deploy --settings ~/.m2/settings.xml
-        
+    # 6) Deploy the artifact to Cloudsmith
+    #    altDeploymentRepository overrides <distributionManagement> and avoids POM edits.
+    - name: Deploy to Cloudsmith
+      run: |
+        mvn -B deploy \
+            -DaltDeploymentRepository=cloudsmith::default::https://maven.cloudsmith.io/${{ env.CLOUDSMITH_ORG }}/${{ env.CLOUDSMITH_REPO }}/ \
+            --settings ~/.m2/settings.xml
