@@ -14,7 +14,7 @@ env:
   CLOUDSMITH_ORG: cloudsmith-test
   #cloudsmith-test 
   #globex-innovations
-  CLOUDSMITH_REPO: acme2
+  CLOUDSMITH_REPO: acme3
   SERVICE: oidc_ciara
   #ci_acme_service
   #oidc_ciara 
