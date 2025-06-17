@@ -19,32 +19,32 @@ env:
   #ci_acme_service
   #oidc_ciara 
 
+
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
     # 1) Checkout
-    - name: Check out repo
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     # 2) JDK
-    - name: Set up JDK 11
-      uses: actions/setup-java@v2
+    - uses: actions/setup-java@v2
       with:
         java-version: "11"
         distribution: "adopt"
 
-    # 3) Authenticate to Cloudsmith via OIDC
-    - name: Cloudsmith OIDC login
+    # 3) Auth to Cloudsmith (read-only)
+    #    Needed only if the repo is private.  If it’s public, you can skip this step
+    - name: Cloudsmith OIDC login (read only)
       uses: cloudsmith-io/cloudsmith-cli-action@v1.0.2
       with:
         oidc-namespace: ${{ env.CLOUDSMITH_ORG }}
         oidc-service-slug: ${{ env.SERVICE }}
         oidc-auth-only: "true"
-        pip-install: false   # we’re not using pip here
+        pip-install: false
 
-    # 4) Write ~/.m2/settings.xml  
+    # 4) Write Maven settings.xml (mirror for dependency pulls)
     - name: Configure Maven settings
       run: |
         mkdir -p ~/.m2
@@ -59,10 +59,9 @@ jobs:
           </servers>
 
           <mirrors>
-            <!-- Mirror *everything* through Cloudsmith except the repo whose id is 'central'. -->
             <mirror>
               <id>cloudsmith</id>
-              <name>Cloudsmith mirror</name>
+              <name>Cloudsmith mirror (all but central)</name>
               <url>https://maven.cloudsmith.io/${{ env.CLOUDSMITH_ORG }}/${{ env.CLOUDSMITH_REPO }}/</url>
               <mirrorOf>*,!central</mirrorOf>
             </mirror>
@@ -70,14 +69,6 @@ jobs:
         </settings>
         EOF
 
-    # 5) Build + unit tests
+    # 5) Build & test
     - name: Build with Maven
       run: mvn -B clean verify --settings ~/.m2/settings.xml -U
-
-    # 6) Deploy the artifact to Cloudsmith
-    #    altDeploymentRepository overrides <distributionManagement> and avoids POM edits.
-    - name: Deploy to Cloudsmith
-      run: |
-        mvn -B deploy \
-            -DaltDeploymentRepository=cloudsmith::default::https://maven.cloudsmith.io/${{ env.CLOUDSMITH_ORG }}/${{ env.CLOUDSMITH_REPO }}/ \
-            --settings ~/.m2/settings.xml
