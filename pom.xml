@@ -12,11 +12,11 @@
   <distributionManagement>
     <repository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/acme-prod/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/abigproduct-nonprod/</url>
     </repository>
     <snapshotRepository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/acme-prod/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/abigproduct-nonprod/</url>
     </snapshotRepository>
   </distributionManagement>
 
