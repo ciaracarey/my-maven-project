@@ -86,15 +86,12 @@ jobs:
         run: mvn deploy --settings ~/.m2/settings.xml
 
       # 7) Install and tet synk 
-      - name: Set up Snyk
-        uses: snyk/actions/setup@master
-        with:
-          version: 'latest'
+      - name: Install Snyk CLI
+        run: npm install -g snyk
 
-      - name: Snyk Test (debug)
+      - name: Snyk Test (single POM)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          SNYK_LOG_LEVEL: debug
-          run: snyk test --file=pom.xml
+        run: snyk test --file=pom.xml
 
   
