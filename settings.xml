@@ -15,7 +15,7 @@
     <mirror>
       <id>cloudsmith</id>
       <name>All repos via Cloudsmith</name>
-      <url>https://maven.cloudsmith.io/${env.CLOUDSMITH_ORG}/${env.CLOUDSMITH_REPO}/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/abigproduct-nonprod/</url>
       <mirrorOf>*</mirrorOf>
     </mirror>
   </mirrors>
