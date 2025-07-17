@@ -84,4 +84,12 @@ jobs:
       # 6) Deploy to Cloudsmith
       - name: Deploy to Cloudsmith
         run: mvn deploy --settings ~/.m2/settings.xml
+
+      # 7) Snyk test with debug logging
+      - name: Snyk Test (debug)
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_LOG_LEVEL: debug
+        run: |
+          snyk test --all-projects --file=pom.xml
   
