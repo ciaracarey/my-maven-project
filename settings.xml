@@ -1,0 +1,22 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                              https://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <servers>
+    <server>
+      <!-- must match the <id> you use in your POM's distributionManagement and any repo definitions -->
+      <id>cloudsmith</id>  
+      <username>${{ secrets.CLOUDSMITH_USERNAME }}</username>
+      <password>${{ secrets.CLOUDSMITH_API_KEY }}</password>
+    </server>
+  </servers>
+
+  <mirrors>
+    <mirror>
+      <id>cloudsmith</id>
+      <name>All repos via Cloudsmith</name>
+      <url>https://maven.cloudsmith.io/${env.CLOUDSMITH_ORG}/${env.CLOUDSMITH_REPO}/</url>
+      <mirrorOf>*</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
