@@ -95,5 +95,6 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           SNYK_LOG_LEVEL: debug
-        run: snyk test --all-projects --file=pom.xml
+          run: snyk test --file=pom.xml
+
   
