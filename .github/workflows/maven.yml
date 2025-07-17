@@ -85,11 +85,15 @@ jobs:
       - name: Deploy to Cloudsmith
         run: mvn deploy --settings ~/.m2/settings.xml
 
-      # 7) Snyk test with debug logging
+      # 7) Install and tet synk 
+      - name: Set up Snyk
+        uses: snyk/actions/setup@master
+        with:
+          version: 'latest'
+
       - name: Snyk Test (debug)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           SNYK_LOG_LEVEL: debug
-        run: |
-          snyk test --all-projects --file=pom.xml
+        run: snyk test --all-projects --file=pom.xml
   
