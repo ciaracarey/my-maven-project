@@ -2,7 +2,7 @@ version: 2
 registries:
   cloudsmith:
     type: "maven-repository"
-    url: "https://dl.cloudsmith.io/basic/globex-innovations/sbom-support/maven/"
+    url: "https://dl.cloudsmith.io/basic/globex-innovations/abigproduct-nonprod/maven/"
     #username: "${{ secrets.DEP_CLOUDSMITH_USER_NAME }}"
     #password: "${{ secrets.DEP_CLOUDSMITH_API_KEY }}"
     #username: "oauth2"
