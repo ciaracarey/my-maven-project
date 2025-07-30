@@ -81,7 +81,3 @@ jobs:
       - name: Build with Maven
         run: mvn clean package --settings ~/.m2/settings.xml -U
         
-      # 6) Deploy to Cloudsmith
-      - name: Deploy to Cloudsmith
-        run: mvn deploy --settings ~/.m2/settings.xml
-  
