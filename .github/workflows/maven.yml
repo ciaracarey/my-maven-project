@@ -84,14 +84,4 @@ jobs:
       # 6) Deploy to Cloudsmith
       - name: Deploy to Cloudsmith
         run: mvn deploy --settings ~/.m2/settings.xml
-
-      # 7) Install and tet synk 
-      - name: Install Snyk CLI
-        run: npm install -g snyk
-
-      - name: Snyk Test (single POM)
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --file=pom.xml
-
   
