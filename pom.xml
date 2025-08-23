@@ -30,7 +30,7 @@
     <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-compress</artifactId>
-        <version>1.18</version> <!-- CVE‑2021‑36090, fixed in 1.21+ -->
+        <version>1.28.0</version> <!-- CVE‑2021‑36090, fixed in 1.21+ -->
     </dependency>
 
     <!-- Optional: JUnit if you want test step -->
