@@ -5,39 +5,35 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-# ──────────────────────────────
-# Variables
-# ──────────────────────────────
 variables:
-  # Cloudsmith org + repo
+  # Cloudsmith
   CS_WORKSPACE: 'globex-innovations'
   CS_REPO: 'acme-nonprod'
-
-  # Cloudsmith service account slug (OIDC)
   CS_SERVICE_SLUG: 'azure_acme_service'
 
-  # Must match <id> in pom.xml repositories/servers
+  # Must match <id> in pom.xml
   CLOUDSMITH_SERVER_ID: 'central'
 
-# ──────────────────────────────
-# Steps
-# ──────────────────────────────
 steps:
-# 1) Checkout
 - checkout: self
 
-# 2) Authenticate to Cloudsmith using Azure DevOps OIDC
-- task: CloudsmithCliSetupAndAuthenticate@1.1.1
-  displayName: "Cloudsmith: Authenticate via ADO OIDC"
+# ──────────────────────────────
+# Cloudsmith: Authenticate via Azure DevOps OIDC
+# (latest task, no version pin)
+# ──────────────────────────────
+- task: CloudsmithCliSetupAndAuthenticate
+  displayName: "Cloudsmith: Authenticate via OIDC (no CLI install)"
   inputs:
     authMethod: 'oidc'
-    oidcAuthOnly: true           # no CLI install
+    oidcAuthOnly: true          # authenticate only, no CLI install
     pipInstall: false
-    cliVersion: ''               # ignored when oidcAuthOnly=true
+    cliVersion: ''              # empty = latest (ignored when oidcAuthOnly=true)
     oidcNamespace: '$(CS_WORKSPACE)'
     oidcServiceSlug: '$(CS_SERVICE_SLUG)'
 
-# 3) Create Maven settings.xml using short-lived API key
+# ──────────────────────────────
+# Create Maven settings.xml using short-lived key
+# ──────────────────────────────
 - bash: |
     set -euo pipefail
     mkdir -p ~/.m2
@@ -56,10 +52,10 @@ steps:
   displayName: "Create Maven settings.xml (Cloudsmith OIDC)"
   env:
     CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
-    CS_SERVICE_SLUG: $(CS_SERVICE_SLUG)
-    CLOUDSMITH_SERVER_ID: $(CLOUDSMITH_SERVER_ID)
 
-# 4) Build / test / deploy
+# ──────────────────────────────
+# Maven build / deploy
+# ──────────────────────────────
 - task: Maven@4
   displayName: "Maven clean deploy"
   inputs:
