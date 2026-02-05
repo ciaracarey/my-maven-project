@@ -9,7 +9,7 @@ variables:
   # Cloudsmith
   CS_WORKSPACE: 'globex-innovations'
   CS_REPO: 'acme-nonprod'
-  CS_SERVICE_SLUG: 'azure_acme_service'
+  CS_SERVICE_SLUG: 'ci_acme_service'
 
   # Must match <id> in pom.xml
   CLOUDSMITH_SERVER_ID: 'central'
