@@ -21,7 +21,7 @@ steps:
 # Cloudsmith: Authenticate via Azure DevOps OIDC
 # (latest task, no version pin)
 # ──────────────────────────────
-- task: CloudsmithCliSetupAndAuthenticate
+- task: CloudsmithCliSetupAndAuthenticate@1.2.0
   displayName: "Cloudsmith: Authenticate via OIDC (no CLI install)"
   inputs:
     authMethod: 'oidc'
