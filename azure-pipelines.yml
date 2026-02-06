@@ -72,7 +72,7 @@ steps:
   displayName: "Maven clean deploy"
   inputs:
     mavenPOMFile: 'pom.xml'
-    goals: 'clean deploy -DskipTests'
+    goals: 'clean package -DskipTests'
     options: '-s $(HOME)/.m2/settings.xml -U'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
