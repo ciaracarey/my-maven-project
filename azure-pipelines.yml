@@ -84,7 +84,7 @@ steps:
   displayName: "Maven pom check and resolve dependecies"
   inputs:
     mavenPOMFile: 'pom.xml'
-    goals: 'clean validate -U'
+    goals: 'clean deploy -DskipTests'
     options: '-s $(HOME)/.m2/settings.xml -U'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
