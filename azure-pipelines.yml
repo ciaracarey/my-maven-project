@@ -39,14 +39,26 @@ steps:
     mkdir -p ~/.m2
 
     cat > ~/.m2/settings.xml <<EOF
-    <settings>
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                                  https://maven.apache.org/xsd/settings-1.0.0.xsd">
       <servers>
         <server>
-          <id>${CLOUDSMITH_SERVER_ID}</id>
+          <id>cloudsmith</id>
           <username>${CS_SERVICE_SLUG}</username>
           <password>${CLOUDSMITH_API_KEY}</password>
         </server>
       </servers>
+
+      <mirrors>
+        <mirror>
+          <id>cloudsmith</id>
+          <name>Cloudsmith proxy cache</name>
+          <url>https://maven.cloudsmith.io/${env.CS_WORKSPACE}/${env.CS_REPO}/</url>
+          <mirrorOf>*</mirrorOf>
+        </mirror>
+      </mirrors>
     </settings>
     EOF
   displayName: "Create Maven settings.xml (Cloudsmith OIDC)"
