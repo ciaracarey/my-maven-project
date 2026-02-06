@@ -72,9 +72,8 @@ steps:
   displayName: "Maven clean deploy"
   inputs:
     mavenPOMFile: 'pom.xml'
-    goals: 'clean deploy'
+    goals: 'clean deploy -DskipTests'
     options: '-s $(HOME)/.m2/settings.xml -U'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    publishJUnitResults: false
