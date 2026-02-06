@@ -78,7 +78,7 @@ steps:
     CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
 
 # ──────────────────────────────
-# Maven build / deploy
+# Maven resolve dependencies
 # ──────────────────────────────
 - task: Maven@4
   displayName: "Maven pom check and resolve dependecies"
