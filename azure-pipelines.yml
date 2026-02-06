@@ -12,7 +12,7 @@ variables:
   CS_SERVICE_SLUG: 'ci_acme_service'
 
   # Must match <id> in pom.xml
-  CLOUDSMITH_SERVER_ID: 'central'
+  CLOUDSMITH_SERVER_ID: 'cloudsmith'
 
 steps:
 - checkout: self
