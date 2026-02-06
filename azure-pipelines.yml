@@ -81,7 +81,7 @@ steps:
 # Maven build / deploy
 # ──────────────────────────────
 - task: Maven@4
-  displayName: "Maven clean deploy"
+  displayName: "Maven pom check and resolve dependecies"
   inputs:
     mavenPOMFile: 'pom.xml'
     goals: 'clean validate'
