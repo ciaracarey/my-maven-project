@@ -32,6 +32,13 @@
         <artifactId>commons-compress</artifactId>
         <version>1.18</version> <!-- CVE‑2021‑36090, fixed in 1.21+ -->
     </dependency>
+    <!-- Optional: JUnit if you want test step -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
