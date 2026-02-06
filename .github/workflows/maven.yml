@@ -13,7 +13,7 @@ permissions:
 env:
   CLOUDSMITH_ORG: globex-innovations
   CLOUDSMITH_REPO: acme-nonprod
-  SERVICE: ci_acme_service
+  SERVICE: ci_acme_servicex
 
 jobs:
   build-and-deploy:
