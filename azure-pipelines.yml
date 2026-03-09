@@ -56,7 +56,7 @@ steps:
           <id>cloudsmith</id>
           <name>Cloudsmith proxy cache</name>
             <url>https://maven.cloudsmith.io/globex-innovations/acme-nonprod/</url>
-          <mirrorOf>*</mirrorOf>
+          <mirrorOf>external:*</mirrorOf>
         </mirror>
       </mirrors>
       <pluginRepositories>
