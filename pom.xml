@@ -35,6 +35,16 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <distributionManagement>
+    <repository>
+        <id>cloudsmith</id>
+        <url>https://maven.cloudsmith.io/globex-innovations/acme-nonprod/</url>
+    </repository>
+    <snapshotRepository>
+        <id>cloudsmith</id>
+        <url>https://maven.cloudsmith.io/globex-innovations/acme-nonprod/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
   <build>
     <plugins>

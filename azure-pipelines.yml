@@ -79,6 +79,19 @@ steps:
     publishJUnitResults: false
 
 # ──────────────────────────────
+# Maven: Publish to Cloudsmith
+# ──────────────────────────────
+- task: Maven@4
+  displayName: "Maven: Publish to Cloudsmith"
+  inputs:
+    mavenPOMFile: 'pom.xml'
+    goals: 'deploy -Dmaven.test.skip=true'
+    options: '-s $(HOME)/.m2/settings.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    publishJUnitResults: false
+
+# ──────────────────────────────
 # Docker: Login to Cloudsmith
 # ──────────────────────────────
 - bash: |
