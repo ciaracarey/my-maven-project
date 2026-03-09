@@ -89,3 +89,22 @@ steps:
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     publishJUnitResults: false
+
+# ──────────────────────────────
+# Docker: Login to Cloudsmith
+# ──────────────────────────────
+- bash: |
+    echo "$(CLOUDSMITH_API_KEY)" | docker login docker.cloudsmith.io \
+      --username $(CS_SERVICE_SLUG) \
+      --password-stdin
+  displayName: "Docker: Login to Cloudsmith"
+  env:
+    CLOUDSMITH_API_KEY: $(CLOUDSMITH_API_KEY)
+
+# ──────────────────────────────
+# Docker: Build and Push
+# ──────────────────────────────
+- bash: |
+    docker build -t docker.cloudsmith.io/$(CS_WORKSPACE)/$(CS_REPO)/vuln-demo:$(Build.BuildId) .
+    docker push docker.cloudsmith.io/$(CS_WORKSPACE)/$(CS_REPO)/vuln-demo:$(Build.BuildId)
+  displayName: "Docker: Build and Push to Cloudsmith"
