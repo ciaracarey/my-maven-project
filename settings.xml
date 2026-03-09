@@ -16,7 +16,7 @@
       <id>cloudsmith</id>
       <name>All repos via Cloudsmith</name>
       <url>https://maven.cloudsmith.io/globex-innovations/acme-nonprod/</url>
-      <mirrorOf>*</mirrorOf>
+      <mirrorOf>external:*</mirrorOf>
     </mirror>
   </mirrors>
 </settings>
