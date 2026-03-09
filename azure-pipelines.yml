@@ -59,18 +59,6 @@ steps:
           <mirrorOf>external:*</mirrorOf>
         </mirror>
       </mirrors>
-      <pluginRepositories>
-        <pluginRepository>
-          <id>cloudsmith</id>
-          <url>https://maven.cloudsmith.io/globex-innovations/acme-nonprod/</url>
-          <releases>
-            <enabled>true</enabled>
-          </releases>
-          <snapshots>
-            <enabled>true</enabled>
-          </snapshots>
-        </pluginRepository>
-      </pluginRepositories>
     </settings>
     EOF
   displayName: "Create Maven settings.xml (Cloudsmith OIDC)"
