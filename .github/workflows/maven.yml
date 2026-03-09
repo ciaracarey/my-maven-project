@@ -65,7 +65,7 @@ jobs:
                   <id>cloudsmith</id>
                   <name>Cloudsmith proxy cache</name>
                   <url>https://maven.cloudsmith.io/${{ env.CLOUDSMITH_ORG }}/${{ env.CLOUDSMITH_REPO }}/</url>
-                  <mirrorOf>*</mirrorOf>
+                  <mirrorOf>external:*</mirrorOf>
                 </mirror>
               </mirrors>
           </settings>
