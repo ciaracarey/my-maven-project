@@ -82,11 +82,11 @@ steps:
 # Maven: Publish to Cloudsmith
 # ──────────────────────────────
 - task: Maven@4
-  displayName: "Maven: Publish to Cloudsmith"
+  displayName: "Maven pom check and resolve dependencies"
   inputs:
     mavenPOMFile: 'pom.xml'
-    goals: 'deploy -Dmaven.test.skip=true'
-    options: '-s $(HOME)/.m2/settings.xml'
+    goals: 'package -Dmaven.test.skip=true'
+    options: '-s $(HOME)/.m2/settings.xml -U -Dhttp.connectionTimeout=60000 -Dhttp.readTimeout=120000'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     publishJUnitResults: false
