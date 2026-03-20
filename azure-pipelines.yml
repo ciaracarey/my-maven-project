@@ -86,7 +86,7 @@ steps:
   inputs:
     mavenPOMFile: 'pom.xml'
     goals: 'package -Dmaven.test.skip=true'
-    options: '-s $(HOME)/.m2/settings.xml -U -Dhttp.connectionTimeout=60000 -Dhttp.readTimeout=120000'
+    options: '-s $(HOME)/.m2/settings.xml -U -Dmaven.resolver.transport=native'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     publishJUnitResults: false
