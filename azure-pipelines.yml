@@ -8,7 +8,7 @@ pool:
 variables:
   # Cloudsmith
   CS_WORKSPACE: 'globex-innovations'
-  CS_REPO: 'acme-nonprod'
+  CS_REPO: 'acme-prod'
   CS_SERVICE_SLUG: 'ci_acme_service' 
 
   # Must match <id> in pom.xml
