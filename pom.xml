@@ -31,11 +31,11 @@
   <distributionManagement>
     <repository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/acme-nonprod/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/acme-prod/</url>
     </repository>
     <snapshotRepository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/acme-nonprod/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/acme-prod/</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
