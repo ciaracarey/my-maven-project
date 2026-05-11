@@ -8,7 +8,7 @@ pool:
 variables:
   # Cloudsmith
   CS_WORKSPACE: 'globex-innovations'
-  CS_REPO: 'acme-prod'
+  CS_REPO: 'acme-test'
   CS_SERVICE_SLUG: 'ci_acme_service' 
 
   # Must match <id> in pom.xml
@@ -55,7 +55,7 @@ steps:
         <mirror>
           <id>cloudsmith</id>
           <name>Cloudsmith proxy cache</name>
-            <url>https://dl.cloudsmith.io/basic/globex-innovations/acme-prod/maven/</url>
+            <url>https://dl.cloudsmith.io/basic/globex-innovations/acme-test/maven/</url>
           <mirrorOf>external:*,!central</mirrorOf>
         </mirror>
       </mirrors>
