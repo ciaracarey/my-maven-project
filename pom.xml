@@ -36,11 +36,11 @@
   <distributionManagement>
     <repository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/acme-bus-test/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/acme-bus-test2/</url>
     </repository>
     <snapshotRepository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/acme-bus-test/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/acme-bus-test2/</url>
     </snapshotRepository>
   </distributionManagement>
 </project>

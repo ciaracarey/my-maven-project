@@ -8,7 +8,7 @@ pool:
 variables:
   # Cloudsmith
   CS_WORKSPACE: 'globex-innovations'
-  CS_REPO: 'acme-bus-test'
+  CS_REPO: 'acme-bus-test-2'
   CS_SERVICE_SLUG: 'ci_acme_service' 
 
   # Must match <id> in pom.xml
@@ -55,7 +55,7 @@ steps:
         <mirror>
           <id>cloudsmith</id>
           <name>Cloudsmith proxy cache</name>
-            <url>https://dl.cloudsmith.io/basic/globex-innovations/acme-bus-test/maven/</url>
+          <url>https://maven.cloudsmith.io/globex-innovations/acme-bus-test-2/</url>
           <mirrorOf>external:*</mirrorOf>
         </mirror>
       </mirrors>
@@ -70,6 +70,7 @@ steps:
 # ──────────────────────────────
 - task: Maven@4
   displayName: "Maven pom check and resolve dependencies"
+  retryCountOnTaskFailure: 20
   inputs:
     mavenPOMFile: 'pom.xml'
     goals: 'package -Dmaven.test.skip=true'
@@ -83,6 +84,7 @@ steps:
 # ──────────────────────────────
 - task: Maven@4
   displayName: "Maven: Publish to Cloudsmith"
+  retryCountOnTaskFailure: 20
   inputs:
     mavenPOMFile: 'pom.xml'
     goals: 'deploy -Dmaven.test.skip=true'
