@@ -1,17 +1,18 @@
 name: Java CI and Deploy to Cloudsmith
 
-on: 
+on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-     
-permissions: 
+
+permissions:
   contents: read
-  id-token: write  # Necessary for GH Identity Provider to write the JWT token which Cloudsmith needs to read
+  id-token: write   # Required for OIDC token exchange with Cloudsmith
 
 env:
   CLOUDSMITH_ORG: globex-innovations
+  # Must match the repo in pom.xml distributionManagement
   CLOUDSMITH_REPO: acme-nonprod
   SERVICE: ci_acme_service
 
@@ -24,18 +25,19 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # 2) Set up Java (JDK 11)
+      # 2) Set up Java 11 – use v4, v2 is deprecated
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           java-version: "11"
-          distribution: "adopt"
+          distribution: "temurin"
 
-      # 3) Clear local Maven cache (optional)
+      # 3) Clear local Maven cache (cold-fetch to prove all deps resolve via Cloudsmith)
       - name: Clear Maven cache
         run: rm -rf ~/.m2/repository/*
 
-      # 4a) Get ephemeral token
+      # 4a) Exchange GitHub OIDC token for a Cloudsmith ephemeral API key.
+      #     The action writes CLOUDSMITH_API_KEY into $GITHUB_ENV automatically.
       - name: Auth to Cloudsmith with OIDC
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.2
         with:
@@ -44,7 +46,9 @@ jobs:
           oidc-auth-only: 'true'
           pip-install: false
 
-      # 4b) Configure Maven settings (Pull & Push to Cloudsmith)
+      # 4b) Write Maven settings.
+      #     Mirror uses dl.cloudsmith.io (download URL) – using maven.cloudsmith.io
+      #     adds a redirect on every request and slows cold fetches noticeably.
       - name: Configure Maven settings
         run: |
           mkdir -p ~/.m2
@@ -56,26 +60,39 @@ jobs:
             <servers>
               <server>
                 <id>cloudsmith</id>
-                <username>${{env.SERVICE}}</username>
+                <username>${{ env.SERVICE }}</username>
                 <password>${CLOUDSMITH_API_KEY}</password>
               </server>
             </servers>
             <mirrors>
-                <mirror>
-                  <id>cloudsmith</id>
-                  <name>Cloudsmith proxy cache</name>
-                  <url>https://maven.cloudsmith.io/${{ env.CLOUDSMITH_ORG }}/${{ env.CLOUDSMITH_REPO }}/</url>
-                  <mirrorOf>external:*</mirrorOf>
-                </mirror>
-              </mirrors>
+              <mirror>
+                <id>cloudsmith</id>
+                <name>Cloudsmith proxy cache</name>
+                <!-- dl.cloudsmith.io = direct download, no redirect overhead -->
+                <url>https://dl.cloudsmith.io/basic/${{ env.CLOUDSMITH_ORG }}/${{ env.CLOUDSMITH_REPO }}/maven/</url>
+                <mirrorOf>external:*</mirrorOf>
+              </mirror>
+            </mirrors>
           </settings>
           EOF
-          
-      # Debug: Show Maven settings to verify correctness (remove before production)
-      - name: Debug Generated Maven Settings
+        env:
+          # Wire the ephemeral key written by the OIDC step into this shell env
+          CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
+
+      # Debug: verify settings look correct (remove before going to production)
+      - name: Debug – show Maven settings
         run: cat ~/.m2/settings.xml
 
-      # 5) Build with Maven
-      - name: Build with Maven
-        run: mvn clean package --settings ~/.m2/settings.xml -U
+      # 5) Compile and run tests
+      - name: Test
+        run: mvn test --settings ~/.m2/settings.xml -U
+
+      # 6) Full build (package) – only runs after tests pass
+      - name: Build
+        run: mvn clean package -DskipTests --settings ~/.m2/settings.xml
+
+      # 7) Deploy to Cloudsmith (only on pushes to main, not on PRs)
+      - name: Deploy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: mvn deploy -DskipTests --settings ~/.m2/settings.xml
         

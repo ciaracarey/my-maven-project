@@ -1,3 +1,4 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -6,41 +7,65 @@
   <groupId>com.example</groupId>
   <artifactId>my-app</artifactId>
   <version>1.0-SNAPSHOT</version>
+ 
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
+    <!-- Dependency versions -->
+    <commons-compress.version>1.28.0</commons-compress.version>
+    <jackson.version>2.19.1</jackson.version>
+    <junit.version>5.10.2</junit.version>
   </properties>
+ 
   <dependencies>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.28.0</version>
+      <version>${commons-compress.version}</version>
     </dependency>
+ 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.19.1</version>
+      <version>${jackson.version}</version>
     </dependency>
+ 
+    <!--
+      REMOVED: org.codehaus.jackson:jackson-mapper-asl (1.9.13)
+      That library is EOL (last release 2013) and is a strict subset of
+      com.fasterxml.jackson.core:jackson-databind which is already present.
+      Keeping it only adds transitive risk with no benefit.
+    -->
+ 
+    <!-- JUnit 5 replaces JUnit 4 – single artifact, fewer transitive deps -->
     <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <version>1.9.13</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
+ 
+  <build>
+    <plugins>
+      <!-- Required for JUnit 5 test discovery -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+      </plugin>
+    </plugins>
+  </build>
+ 
   <distributionManagement>
+    <!-- Upload URL (maven.cloudsmith.io) is correct for publishing -->
     <repository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/acme-bus-test2/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/acme-nonprod/</url>
     </repository>
     <snapshotRepository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/acme-bus-test2/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/acme-nonprod/</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
