@@ -80,19 +80,23 @@ jobs:
           CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
 
       # Debug: verify settings look correct (remove before going to production)
-      - name: Debug – show Maven settings
-        run: cat ~/.m2/settings.xml
+      #- name: Debug – show Maven settings
+      #  run: cat ~/.m2/settings.xml
+
+      #- name: Test Maven cold fetch
+      #  run: mvn -Daether.transport.http.requestTimeout=600000 test --settings ~/.m2/settings.xml
 
       # 5) Compile and run tests
       - name: Test
         run: mvn test --settings ~/.m2/settings.xml -U
 
+
       # 6) Full build (package) – only runs after tests pass
-      - name: Build
-        run: mvn clean package -DskipTests --settings ~/.m2/settings.xml
+      #- name: Build
+      #  run: mvn clean package -DskipTests --settings ~/.m2/settings.xml
 
       # 7) Deploy to Cloudsmith (only on pushes to main, not on PRs)
-      - name: Deploy
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: mvn deploy -DskipTests --settings ~/.m2/settings.xml
+      #- name: Deploy
+      #  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #  run: mvn deploy -DskipTests --settings ~/.m2/settings.xml
         
