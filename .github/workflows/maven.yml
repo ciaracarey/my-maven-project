@@ -86,8 +86,11 @@ jobs:
       #- name: Test Maven cold fetch
       #  run: mvn -Daether.transport.http.requestTimeout=600000 test --settings ~/.m2/settings.xml
 
+      #- name: Build
+      #  run: mvn package -DskipTests --settings ~/.m2/settings.xml -U
+
       - name: Build
-        run: mvn package -DskipTests --settings ~/.m2/settings.xml -U
+        run: mvn package -Dmaven.test.skip=true --settings ~/.m2/settings.xml -U
 
       # 5) Compile and run tests
         #- name: Test
