@@ -13,7 +13,7 @@ permissions:
 env:
   CLOUDSMITH_ORG: globex-innovations
   # Must match the repo in pom.xml distributionManagement
-  CLOUDSMITH_REPO: acme-nonprod
+  CLOUDSMITH_REPO: maven-test
   SERVICE: ci_acme_service
 
 jobs:
