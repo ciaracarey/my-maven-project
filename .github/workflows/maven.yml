@@ -91,14 +91,8 @@ jobs:
 
       #- name: Build
       #  run: mvn package -Dmaven.test.skip=true --settings ~/.m2/settings.xml -U
-
       - name: Build
-        run: |
-          mvn package -DskipTests --settings ~/.m2/settings.xml -U || {
-            echo "Build failed — waiting 60s before retry..."
-            sleep 60
-            mvn package -DskipTests --settings ~/.m2/settings.xml -U
-          }
+        run: mvn package -Dmaven.test.skip=true --settings ~/.m2/settings.xml -U
 
       # 5) Compile and run tests
         #- name: Test
