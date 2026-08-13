@@ -91,20 +91,26 @@ jobs:
 
       #- name: Build
       #  run: mvn package -Dmaven.test.skip=true --settings ~/.m2/settings.xml -U
-      - name: Build
-        run: mvn package -Dmaven.test.skip=true -Daether.transport.http.connectTimeout=60000 -Daether.transport.http.readTimeout=600000 --settings ~/.m2/settings.xml -U
-                   
-      # 5) Compile and run tests
-        #- name: Test
-         # run: mvn test --settings ~/.m2/settings.xml -U
-
-
-      # 6) Full build (package) – only runs after tests pass
       #- name: Build
-      #  run: mvn clean package -DskipTests --settings ~/.m2/settings.xml
+      #  run: mvn package -Dmaven.test.skip=true -Daether.transport.http.connectTimeout=60000 -Daether.transport.http.readTimeout=600000 --settings ~/.m2/settings.xml -U
 
-      # 7) Deploy to Cloudsmith (only on pushes to main, not on PRs)
-      #- name: Deploy
-      #  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #  run: mvn deploy -DskipTests --settings ~/.m2/settings.xml
-        
+      - name: Build
+        run: |  
+          for attempt in {1..5}; do
+            echo "========== Attempt $attempt =========="
+            if mvn package \
+              -Dmaven.test.skip=true \
+              -Daether.transport.http.connectTimeout=60000 \
+              -Daether.transport.http.readTimeout=600000 \
+              --settings ~/.m2/settings.xml \
+              -U; then
+              echo "✓ Build succeeded on attempt $attempt"
+              exit 0
+            fi
+            if [ $attempt -lt 5 ]; then
+              echo "✗ Build failed, retrying in 10 seconds..."
+              sleep 10
+            fi
+          done
+          echo "✗ Build failed after 5 attempts"
+          exit 1
