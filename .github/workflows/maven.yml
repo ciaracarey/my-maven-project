@@ -92,8 +92,13 @@ jobs:
       #- name: Build
       #  run: mvn package -Dmaven.test.skip=true --settings ~/.m2/settings.xml -U
       - name: Build
-        run: mvn package -Dmaven.test.skip=true --settings ~/.m2/settings.xml -U
-             
+        run: mvn package \
+          -Dmaven.test.skip=true \
+          -Daether.transport.http.connectTimeout=60000 \
+          -Daether.transport.http.readTimeout=600000 \
+          --settings ~/.m2/settings.xml \
+          -U
+                   
       # 5) Compile and run tests
         #- name: Test
          # run: mvn test --settings ~/.m2/settings.xml -U
