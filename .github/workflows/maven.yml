@@ -13,7 +13,7 @@ permissions:
 env:
   CLOUDSMITH_ORG: globex-innovations
   # Must match the repo in pom.xml distributionManagement
-  CLOUDSMITH_REPO: maven-test
+  CLOUDSMITH_REPO: maven-test2
   SERVICE: ci_acme_service
 
 jobs:
@@ -93,7 +93,7 @@ jobs:
       #  run: mvn package -Dmaven.test.skip=true --settings ~/.m2/settings.xml -U
       - name: Build
         run: mvn package -Dmaven.test.skip=true --settings ~/.m2/settings.xml -U
-
+             
       # 5) Compile and run tests
         #- name: Test
          # run: mvn test --settings ~/.m2/settings.xml -U
