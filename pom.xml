@@ -61,11 +61,11 @@
     <!-- Upload URL (maven.cloudsmith.io) is correct for publishing -->
     <repository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/maven-test2/acme-nonprod/</url>
+      <url>https://maven.cloudsmith.io/maven-clam-rust/acme-nonprod/</url>
     </repository>
     <snapshotRepository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/maven-test2/acme-nonprod/</url>
+      <url>https://maven.cloudsmith.io/maven-clam-rust/acme-nonprod/</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
