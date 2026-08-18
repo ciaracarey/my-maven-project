@@ -13,7 +13,7 @@ permissions:
 env:
   CLOUDSMITH_ORG: globex-innovations
   # Must match the repo in pom.xml distributionManagement
-  CLOUDSMITH_REPO: maven-clam-rust
+  CLOUDSMITH_REPO: maven-clam-rust2
   SERVICE: ci_acme_service
 
 jobs:
