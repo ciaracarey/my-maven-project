@@ -61,11 +61,11 @@
     <!-- Upload URL (maven.cloudsmith.io) is correct for publishing -->
     <repository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/maven-clam-rust3/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/maven-clam-rust4/</url>
     </repository>
     <snapshotRepository>
       <id>cloudsmith</id>
-      <url>https://maven.cloudsmith.io/globex-innovations/maven-clam-rust3/</url>
+      <url>https://maven.cloudsmith.io/globex-innovations/maven-clam-rust4/</url>
     </snapshotRepository>
   </distributionManagement>
 </project>
