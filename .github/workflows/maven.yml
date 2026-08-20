@@ -95,4 +95,5 @@ jobs:
       #  run: mvn package -Dmaven.test.skip=true -Daether.transport.http.connectTimeout=60000 -Daether.transport.http.readTimeout=600000 --settings ~/.m2/settings.xml -U
 
       - name: Build
-        run: mvn package -Dmaven.test.skip=true -Daether.dependencyCollector.bf.threads=20 -Daether.connector.basic.threads=20
+        #run: mvn package -Dmaven.test.skip=true -Daether.dependencyCollector.bf.threads=20 -Daether.connector.basic.threads=20
+        run: mvn package -Dmaven.test.skip=true -Daether.dependencyCollector.impl=bf -Daether.dependencyCollector.bf.threads=20 -Daether.connector.basic.threads=20 --settings ~/.m2/settings.xml -U
