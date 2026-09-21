@@ -13,7 +13,7 @@ permissions:
 env:
   CLOUDSMITH_ORG: globex-innovations
   # Must match the repo in pom.xml distributionManagement
-  CLOUDSMITH_REPO: maven-clam-rust4
+  CLOUDSMITH_REPO: mavern-service
   SERVICE: ci_acme_service
 
 jobs:
@@ -78,21 +78,6 @@ jobs:
         env:
           # Wire the ephemeral key written by the OIDC step into this shell env
           CLOUDSMITH_API_KEY: ${{ env.CLOUDSMITH_API_KEY }}
-
-      # Debug: verify settings look correct (remove before going to production)
-      #- name: Debug – show Maven settings
-      #  run: cat ~/.m2/settings.xml
-
-      #- name: Test Maven cold fetch
-      #  run: mvn -Daether.transport.http.requestTimeout=600000 test --settings ~/.m2/settings.xml
-
-      #- name: Build
-      #  run: mvn package -DskipTests --settings ~/.m2/settings.xml -U
-
-      #- name: Build
-      #  run: mvn package -Dmaven.test.skip=true --settings ~/.m2/settings.xml -U
-      #- name: Build
-      #  run: mvn package -Dmaven.test.skip=true -Daether.transport.http.connectTimeout=60000 -Daether.transport.http.readTimeout=600000 --settings ~/.m2/settings.xml -U
 
       - name: Build
         #run: mvn package -Dmaven.test.skip=true -Daether.dependencyCollector.bf.threads=20 -Daether.connector.basic.threads=20
